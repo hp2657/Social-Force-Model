@@ -62,7 +62,7 @@ obs: each line means an obstacle, x_min, x_max, y_min, y_max
 '''
 step: Determine how many steps the program will run
 '''
-step = 6000
+step = 12000
 
 '''
 number_of_people: the total number of people
@@ -465,6 +465,7 @@ class SceneAnimation:
         self.fig, self.ax = plt.subplots()
         self.points, = self.ax.plot([], [], 'bo')
         self.frame_text = self.ax.text(0.02, 0.95, '', transform=self.ax.transAxes, fontsize=10, color='black')
+        self.ax.set_aspect('equal', adjustable='box')
         #self.ax.set_xlim((-20, 15))
         #self.ax.set_ylim((-10, 10))
         
@@ -559,4 +560,38 @@ if __name__ == "__main__":
     tc = TrajectoryShow(s.state_record, obs, 'trajectory', point_index)
     tc.plot()
     
+    
+    
+import codecs
+import csv
+def data_write_csv(file_name, datas):
+        file_csv = codecs.open(file_name,'w+','utf-8')
+        writer = csv.writer(file_csv, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
+        for data in datas:
+            writer.writerow(data)
+        print("record saved as csv")
+
+data_write_csv('state record.csv', s.state_record)
+
+'''
+data_write_csv: parameter: file name
+s.state_record: a list with length = step, step is the parameter mentioned before
+every item of s.state_record is the state of all pedestrain at this step
+the i th item is the state of all pedestrain at i th step
+the item has 9 columns, the meaning of each column is as follows
+
+column1:X-axis coordinates of the position
+column2:Y-axis coordinates of the position
+column3:X-axis coordinates of the velocity
+column4:Y-axis coordinates of the velocity
+column5:X-axis coordinates of the destination
+column6:Y-axis coordinates of the destination
+column7:max_speed
+column8:weight
+column9:identification with value 0,1,2
+0 means the pedestrain has not beed released
+1 means the pedestrain has been released but not arrive the destination
+2 means the pedestrain has reached the destination
+'''
+
 
